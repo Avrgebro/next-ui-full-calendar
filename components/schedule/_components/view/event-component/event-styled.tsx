@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Chip } from "@nextui-org/chip";
+import { Badge } from "@/components/ui/badge";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import { Event, CustomEventModal } from "@/types";
@@ -63,18 +63,16 @@ export default function EventStyled({
       key={event?.id}
       className="w-full relative use-automation-zoom-in cursor-pointer border border-default-400/60 rounded-lg  flex flex-col flex-grow "
     >
-      <Chip
+      <Badge
         onClickCapture={(e: React.MouseEvent<HTMLDivElement>) => {
           e.stopPropagation();
           handlers.handleDeleteEvent(event?.id);
         }}
         color="danger"
-        variant="solid"
-        classNames={{ content: "max-w-fit min-w-0 p-1" }}
         className="absolute z-50 right-0 top-[-5px]"
       >
         <TrashIcon size={12} />
-      </Chip>
+      </Badge>
       {event.CustomEventComponent ? (
         <div
           onClickCapture={(e) => {
@@ -92,7 +90,7 @@ export default function EventStyled({
           <event.CustomEventComponent {...event} />
         </div>
       ) : (
-        <Chip
+        <Badge
           onClickCapture={(e) => {
             e.stopPropagation(); // Stop event from propagating to parent
             handleEditEvent({
@@ -104,10 +102,9 @@ export default function EventStyled({
               variant: event?.variant,
             });
           }}
-          variant="flat"
+          variant="secondary"
           color={event?.variant}
-          classNames={{ content: "p-0" }}
-          className={`min-w-full items-start p-0 flex-grow flex-col flex ${event?.minmized ? "h-full" : "min-h-fit p-1"} rounded-md`}
+          className={`min-w-full items-start bg-red-500 p-0 flex-grow flex-col flex ${event?.minmized ? "h-full" : "min-h-fit p-1"} rounded-md`}
         >
           <div
             className={`flex ${event?.minmized ? "p-0" : "p-1"} flex-col flex-grow px-1 rounded-md  items-start w-full`}
@@ -120,14 +117,14 @@ export default function EventStyled({
 
             <p className="text-[0.65rem]">{event?.description}</p>
             {!event?.minmized && (
-              <div className="flex justify-between w-full">
+              <div className="flex justify-start w-full">
                 <p className="text-sm">{formatDate(event?.startDate)}</p>
                 <p className="text-sm">-</p>
                 <p className="text-sm">{formatDate(event?.endDate)}</p>
               </div>
             )}
           </div>
-        </Chip>
+        </Badge>
       )}
     </motion.div>
   );

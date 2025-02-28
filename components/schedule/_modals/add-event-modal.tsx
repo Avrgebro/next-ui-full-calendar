@@ -1,24 +1,27 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ModalFooter } from "@nextui-org/modal";
-import { Button } from "@nextui-org/button";
-import { Input, Textarea } from "@nextui-org/input";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from "@nextui-org/dropdown";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 
 import { useModalContext } from "@/providers/modal-provider";
 import SelectDate from "@/components/schedule/_components/add-event-components/select-date";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EventFormData, eventSchema, Variant, Event } from "@/types/index";
-import { useScheduler } from "@/providers/schedular-provider";
+import { useScheduler } from "@/providers/scheduler-provider";
 import { v4 as uuidv4 } from "uuid"; // Use UUID to generate event IDs
+import { Label } from "@/components/ui/label";
 
 export default function AddEventModal({
   CustomAddEventModal,
@@ -125,73 +128,57 @@ export default function AddEventModal({
         CustomAddEventModal({ register, errors })
       ) : (
         <>
+        <div className="grid w-full max-w-sm items-center gap-1.5">
+          <Label>Event Name</Label>
           <Input
             {...register("title")}
-            label="Event Name"
             placeholder="Enter event name"
-            variant="bordered"
-            isInvalid={!!errors.title}
-            errorMessage={errors.title?.message}
           />
-          <Textarea
-            {...register("description")}
-            label="Description"
-            placeholder="Enter event description"
-            variant="bordered"
-          />
+          </div>
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label>Description</Label>
+            <Textarea
+              {...register("description")}
+              placeholder="Enter event description"
+            />
+          </div>
           <SelectDate data={data} setValue={setValue} />
 
-          <Dropdown backdrop="blur">
-            <DropdownTrigger>
-              <Button
-                variant="flat"
-                className="justify-between w-fit my-4"
-                color={getEventStatus(selectedColor)}
-              >
-                {
-                  colorOptions.find((color) => color.key === selectedColor)
-                    ?.name
-                }
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Color selection"
-              variant="flat"
-              selectionMode="single"
-              selectedKeys={[selectedColor]}
-              onSelectionChange={(keys) => {
-                const color = (keys.currentKey as string) || "blue";
-                setSelectedColor(color);
-
-                reset((formData) => ({
-                  ...formData,
-                  variant: getEventStatus(color),
-                }));
-              }}
-            >
+          <Select
+            value={selectedColor}
+            onValueChange={(value) => {
+              setSelectedColor(value);
+              reset((formData) => ({
+                ...formData,
+                variant: getEventStatus(value),
+              }));
+            }}
+          >
+            <SelectTrigger className="w-fit my-4">
+              <SelectValue placeholder="Select color">
+                {colorOptions.find((color) => color.key === selectedColor)?.name}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
               {colorOptions.map((color) => (
-                <DropdownItem
-                  key={color.key}
-                  startContent={
-                    <div
-                      className={`w-4 h-4 rounded-full bg-${color.key}-500`}
-                    />
-                  }
-                >
-                  {color.name}
-                </DropdownItem>
+                <SelectItem key={color.key} value={color.key}>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-4 h-4 rounded-full bg-${color.key}-500`} />
+                    {color.name}
+                  </div>
+                </SelectItem>
               ))}
-            </DropdownMenu>
-          </Dropdown>
+            </SelectContent>
+          </Select>
 
-          <ModalFooter className="px-0">
-            <Button color="danger" variant="light" onPress={onClose}>
+          <div className="flex gap-2 justify-end">
+            <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <Button color="primary" type="submit">
               Save Event
             </Button>
-          </ModalFooter>
+          </div>
         </>
       )}
     </form>

@@ -1,7 +1,7 @@
 "use client";
 
 import SchedulerWrapper from "@/components/schedule/_components/view/schedular-view-filteration";
-import { SchedulerProvider } from "@/providers/schedular-provider";
+import { SchedulerProvider } from "@/providers/scheduler-provider";
 
 export default function Home() {
   return (

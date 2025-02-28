@@ -1,13 +1,13 @@
 "use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-} from "@nextui-org/modal";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 interface ModalContextType {
   showModal: (config: {
@@ -34,7 +34,13 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({
   } | null>(null);
 
   const [data, setData] = useState<any | null>(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onOpen = () => setIsOpen(true);
+  const onClose = () => {
+    setIsOpen(false);
+    setModalContent(null);
+  };
 
   const showModal = async ({
     title,
@@ -69,29 +75,33 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({
   return (
     <ModalContext.Provider value={{ showModal, onClose, data }}>
       {children}
-      <Modal
-        backdrop="blur"
-        classNames={{
-          backdrop: "max-h-screen overflow-hidden",
-          wrapper: "max-h-screen overflow-hidden",
-        }}
-        isOpen={isOpen}
-        onOpenChange={onClose}
-      >
-        <ModalContent className={modalContent?.modalClassName || ""}>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className={modalContent?.modalClassName || ""} aria-describedby="dialog-description">
           {modalContent && (
             <>
               {modalContent.title && (
-                <ModalHeader>{modalContent.title}</ModalHeader>
+                <DialogHeader>
+                  <DialogTitle>{modalContent.title}</DialogTitle>
+                  <DialogDescription id="dialog-description" className="sr-only">
+                    {typeof modalContent.title === 'string' ? `Dialog for ${modalContent.title}` : 'Modal dialog'}
+                  </DialogDescription>
+                </DialogHeader>
               )}
-              {modalContent.body && <ModalBody>{modalContent.body}</ModalBody>}
+              {!modalContent.title && (
+                <DialogDescription id="dialog-description" className="sr-only">
+                  Modal dialog
+                </DialogDescription>
+              )}
+              {modalContent.body && (
+                <div>{modalContent.body}</div>
+              )}
               {modalContent.footer && (
-                <ModalFooter>{modalContent.footer}</ModalFooter>
+                <DialogFooter>{modalContent.footer}</DialogFooter>
               )}
             </>
           )}
-        </ModalContent>
-      </Modal>
+        </DialogContent>
+      </Dialog>
     </ModalContext.Provider>
   );
 };

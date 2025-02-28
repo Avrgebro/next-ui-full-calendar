@@ -2,10 +2,9 @@
 
 import React, { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Button } from "@nextui-org/button";
-import { Tabs, Tab } from "@nextui-org/tabs";
-import { Calendar, CalendarDaysIcon } from "lucide-react";
-import { BsCalendarMonth, BsCalendarWeek } from "react-icons/bs";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar } from "lucide-react";
 
 import AddEventModal from "../../_modals/add-event-modal";
 import DailyView from "./day/daily-view";
@@ -108,25 +107,29 @@ export default function SchedulerViewFilteration({
       <div className="flex w-full">
         <div className="dayly-weekly-monthly-selection relative w-full">
           <Tabs
-            classNames={{ ...classNames?.tabs }}
+            className={classNames?.tabs?.wrapper}
             aria-label="Options"
-            color="primary"
-            variant="solid"
+            defaultValue="day"
           >
+            <TabsList>
+              {viewsSelector?.includes("day") && (
+                <TabsTrigger value="day">
+                  <span>Day</span>
+                </TabsTrigger>
+              )}
+              {viewsSelector?.includes("week") && (
+                <TabsTrigger value="week">
+                  <span>Week</span>
+                </TabsTrigger>
+              )}
+              {viewsSelector?.includes("month") && (
+                <TabsTrigger value="month">
+                  <span>Month</span>
+                </TabsTrigger>
+              )}
+            </TabsList>
             {viewsSelector?.includes("day") && (
-              <Tab
-                key="day"
-                title={
-                  CustomComponents?.customTabs?.CustomDayTab ? (
-                    CustomComponents.customTabs.CustomDayTab
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <CalendarDaysIcon size={15} />
-                      <span>Day</span>
-                    </div>
-                  )
-                }
-              >
+              <TabsContent value="day">
                 <motion.div {...animationConfig}>
                   <DailyView
                     classNames={classNames?.buttons}
@@ -142,22 +145,10 @@ export default function SchedulerViewFilteration({
                     CustomEventModal={CustomComponents?.CustomEventModal}
                   />
                 </motion.div>
-              </Tab>
+              </TabsContent>
             )}
             {viewsSelector?.includes("week") && (
-              <Tab
-                key="week"
-                title={
-                  CustomComponents?.customTabs?.CustomWeekTab ? (
-                    CustomComponents.customTabs.CustomWeekTab
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <BsCalendarWeek />
-                      <span>Week</span>
-                    </div>
-                  )
-                }
-              >
+              <TabsContent value="week">
                 <motion.div {...animationConfig}>
                   <WeeklyView
                     classNames={classNames?.buttons}
@@ -173,22 +164,10 @@ export default function SchedulerViewFilteration({
                     CustomEventModal={CustomComponents?.CustomEventModal}
                   />
                 </motion.div>
-              </Tab>
+              </TabsContent>
             )}
             {viewsSelector?.includes("month") && (
-              <Tab
-                key="month"
-                title={
-                  CustomComponents?.customTabs?.CustomMonthTab ? (
-                    CustomComponents.customTabs.CustomMonthTab
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <BsCalendarMonth />
-                      <span>Month</span>
-                    </div>
-                  )
-                }
-              >
+              <TabsContent value="month">
                 <motion.div {...animationConfig}>
                   <MonthView
                     classNames={classNames?.buttons}
@@ -204,7 +183,7 @@ export default function SchedulerViewFilteration({
                     CustomEventModal={CustomComponents?.CustomEventModal}
                   />
                 </motion.div>
-              </Tab>
+              </TabsContent>
             )}
           </Tabs>
 
@@ -224,9 +203,8 @@ export default function SchedulerViewFilteration({
                   "absolute top-0 right-0 " + classNames?.buttons?.addEvent
                 }
                 color="primary"
-                startContent={<Calendar />}
               >
-                Add Event
+                <Calendar />Add Event
               </Button>
             )
           }

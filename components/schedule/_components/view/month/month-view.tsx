@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Button } from "@nextui-org/button";
-import { Card } from "@nextui-org/card";
-import { Chip } from "@nextui-org/chip";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";
 
-import { useScheduler } from "@/providers/schedular-provider";
+import { useScheduler } from "@/providers/scheduler-provider";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import ShowMoreEventsModal from "@/components/schedule/_modals/show-more-events-modal";
@@ -152,10 +152,9 @@ export default function MonthView({
           ) : (
             <Button
               className={classNames?.prev}
-              startContent={<ArrowLeft />}
               onClick={handlePrevMonth}
             >
-              Prev
+              <ArrowLeft /> Prev
             </Button>
           )}
           {nextButton ? (
@@ -164,9 +163,8 @@ export default function MonthView({
             <Button
               className={classNames?.next}
               onClick={handleNextMonth}
-              endContent={<ArrowRight />}
             >
-              Next
+              Next <ArrowRight />
             </Button>
           )}
         </div>
@@ -206,8 +204,7 @@ export default function MonthView({
                 variants={itemVariants}
               >
                 <Card
-                  isPressable
-                  className="shadow-md  relative flex p-4 border border-default-100 h-full"
+                  className="shadow-md  relative flex p-4 border border-default-100 h-full cursor-pointer"
                   onClick={() => handleAddEvent(dayObj.day)}
                 >
                   <div
@@ -239,18 +236,18 @@ export default function MonthView({
                       )}
                     </AnimatePresence>
                     {dayEvents.length > 1 && (
-                      <Chip
+                      <Badge
                         onClick={(e) => {
                           e.stopPropagation();
                           handleShowMoreEvents(dayEvents);
                         }}
-                        variant="flat"
+                        variant="outline"
                         className="hover:bg-default-200 absolute right-2 text-xs top-2 transition duration-300"
                       >
                         {dayEvents.length > 1
                           ? `+${dayEvents.length - 1}`
                           : " "}
-                      </Chip>
+                      </Badge>
                     )}
                   </div>
 

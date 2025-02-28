@@ -1,9 +1,7 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
-
-import clsx from "clsx";
-
 import { Providers } from "./providers";
+import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
@@ -35,7 +33,6 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
-      
       <head />
       <body
         className={clsx(

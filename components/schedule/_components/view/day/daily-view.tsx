@@ -2,11 +2,11 @@
 
 import React, { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Button } from "@nextui-org/button";
-import { Chip } from "@nextui-org/chip";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-import { useScheduler } from "@/providers/schedular-provider";
+import { useScheduler } from "@/providers/scheduler-provider";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import EventStyled from "../event-component/event-styled";
@@ -149,10 +149,9 @@ export default function DailyView({
           ) : (
             <Button
               className={classNames?.prev}
-              startContent={<ArrowLeft />}
               onClick={handlePrevDay}
             >
-              Prev
+              <ArrowLeft /> Prev
             </Button>
           )}
           {nextButton ? (
@@ -161,9 +160,8 @@ export default function DailyView({
             <Button
               className={classNames?.next}
               onClick={handleNextDay}
-              endContent={<ArrowRight />}
             >
-              Next
+              Next <ArrowRight />
             </Button>
           )}
         </div>
@@ -263,13 +261,12 @@ export default function DailyView({
               className="absolute left-[50px] w-[calc(100%-53px)] h-[3px]  bg-primary-300 dark:bg-primary/30 rounded-full pointer-events-none"
               style={{ top: `${timelinePosition}px` }}
             >
-              <Chip
+              <Badge
                 color="success"
-                variant="flat"
                 className="absolute vertical-abs-center z-50 left-[-55px] text-xs uppercase"
               >
                 {detailedHour}
-              </Chip>
+              </Badge>
             </div>
           )}
         </div>

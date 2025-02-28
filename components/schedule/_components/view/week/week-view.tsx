@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
-import { useScheduler } from "@/providers/schedular-provider";
-import { Chip } from "@nextui-org/chip";
+import { useScheduler } from "@/providers/scheduler-provider";
+import { Badge } from "@/components/ui/badge";
 import { AnimatePresence, motion } from "framer-motion"; // Import Framer Motion
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import EventStyled from "../event-component/event-styled";
-import { Button } from "@nextui-org/button";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";
 import { Event, CustomEventModal } from "@/types";
@@ -198,10 +198,9 @@ export default function WeeklyView({
         ) : (
           <Button
             className={classNames?.prev}
-            startContent={<ArrowLeft />}
             onClick={handlePrevWeek}
           >
-            Prev
+            <ArrowLeft /> Prev
           </Button>
         )}
         {nextButton ? (
@@ -210,9 +209,8 @@ export default function WeeklyView({
           <Button
             className={classNames?.next}
             onClick={handleNextWeek}
-            endContent={<ArrowRight />}
           >
-            Next
+            Next <ArrowRight />
           </Button>
         )}
       </div>
@@ -259,13 +257,13 @@ export default function WeeklyView({
               className="absolute flex z-10 left-0 w-full h-[3px] bg-primary-300 dark:bg-primary/30 rounded-full pointer-events-none"
               style={{ top: `${timelinePosition}px` }}
             >
-              <Chip
+              <Badge
                 color="success"
-                variant="flat"
+                variant="outline"
                 className="absolute vertical-abs-center z-50 left-[-55px] text-xs uppercase"
               >
                 {detailedHour}
-              </Chip>
+              </Badge>
             </div>
           )}
         </div>
